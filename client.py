@@ -17,16 +17,23 @@ import pytesseract
 
 
 class Client():
-    def __init__(self, cookies: str = '', jaccount: str = '', pwd: str = '') -> None:
+    def __init__(self, cookies: str = '', user_api_key: str = '', jaccount: str = '', pwd: str = '') -> None:
+        if user_api_key != '':
+            self.headers = {
+                'User-Api-Key': user_api_key
+            }
+            return
+
         if cookies == '':
             cookies = self._get_cookies(jaccount, pwd)
             if cookies is None:
-                raise RuntimeError('Please provide correct jaccount and password!')
+                raise RuntimeError(
+                    'Please provide correct jaccount and password!')
 
         self.headers = {
             'Cookie': cookies,
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-        }   
+        }
 
     @staticmethod
     def _get_supported_webdriver() -> Union[None, webdriver.Chrome, webdriver.Edge, webdriver.Safari]:
@@ -34,7 +41,7 @@ class Client():
             return webdriver.Chrome()
         except:
             pass
-            
+
         try:
             return webdriver.Edge()
         except:
@@ -45,7 +52,6 @@ class Client():
         except:
             pass
         return None
-            
 
     @staticmethod
     def _get_cookies(jaccount: str, password: str) -> Optional[str]:
@@ -65,22 +71,24 @@ class Client():
             captcha = driver.find_element(By.ID, "captcha-img")
             with open('captcha.png', 'wb') as f:
                 f.write(captcha.screenshot_as_png)
-            captcha = pytesseract.image_to_string('captcha.png', lang='eng', config='--psm 7')
+            captcha = pytesseract.image_to_string(
+                'captcha.png', lang='eng', config='--psm 7')
 
             driver.find_element(By.ID, "captcha").send_keys(captcha)
-            
+
             time.sleep(0.5)
 
             if driver.current_url.find(base_url) != -1:
                 break
-            
+
             retry_cnt += 1
 
         if retry_cnt == max_retries:
             return None
-        
+
         cookies = driver.get_cookies()
-        cookies = '; '.join([f"{cookie['name']}={cookie['value']}" for cookie in cookies])
+        cookies = '; '.join(
+            [f"{cookie['name']}={cookie['value']}" for cookie in cookies])
         return cookies
 
     def _get_request(self, url: str):
