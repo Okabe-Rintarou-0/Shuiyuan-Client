@@ -81,7 +81,7 @@ class Post:
     can_recover: bool
     can_see_hidden_post: bool
     can_wiki: bool
-    user_title: str
+    user_title: Optional[str]
     reply_to_user: Optional[ReplyToUser]
     bookmarked: bool
     raw: str
@@ -140,7 +140,7 @@ class Post:
         can_recover = from_bool(obj.get("can_recover"))
         can_see_hidden_post = from_bool(obj.get("can_see_hidden_post"))
         can_wiki = from_bool(obj.get("can_wiki"))
-        user_title = from_str(obj.get("user_title"))
+        user_title = from_union([from_str, from_none], obj.get("user_title"))
         reply_to_user = from_union(
             [ReplyToUser.from_dict, from_none], obj.get("reply_to_user"))
         bookmarked = from_bool(obj.get("bookmarked"))
@@ -201,7 +201,8 @@ class Post:
         result["can_recover"] = from_bool(self.can_recover)
         result["can_see_hidden_post"] = from_bool(self.can_see_hidden_post)
         result["can_wiki"] = from_bool(self.can_wiki)
-        result["user_title"] = from_str(self.user_title)
+        result["user_title"] = from_union(
+            [from_str, from_none], self.user_title)
         result["reply_to_user"] = to_class(ReplyToUser, self.reply_to_user)
         result["bookmarked"] = from_bool(self.bookmarked)
         result["raw"] = from_str(self.raw)

@@ -102,7 +102,6 @@ class Client():
         }
         url = search_url + urlencode(params)
         r = self._get_request(url)
-
         try:
             data = r.json()
             return SearchResult.from_dict(data)
