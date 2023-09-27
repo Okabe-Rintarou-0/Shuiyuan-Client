@@ -12,7 +12,7 @@
         ```python
         cli = Client(jaccount='YOUR_JACCOUNT', pwd='YOUR_PASSWORD')
         ```
-    + 使用 User-Api-Key（见 https://shuiyuan.sjtu.edu.cn/t/topic/123808）
+    + 使用 User-Api-Key（见 https://shuiyuan.sjtu.edu.cn/t/topic/123808 ）
         ```python
         cli = Client(user_api_key='YOUR_USER_API_KEY')
         ```
