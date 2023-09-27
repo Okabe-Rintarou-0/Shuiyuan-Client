@@ -1,8 +1,8 @@
 import time
-from typing import Optional, Union
+from typing import Any, Optional, Union
 from urllib.parse import urlencode
 import requests
-from exceptions import ResponseDataFormatErrorException
+from exceptions import ResponseDataFormatErrorException, TooManyOperationsException
 
 from models.search import SearchQuery, SearchResult
 from models.user import UserBadgesInfo
@@ -11,7 +11,7 @@ from models.post import Post
 from selenium import webdriver
 
 from utils import pack_query
-from constants import search_url, user_badges_url, not_found_error, post_url, base_url
+from constants import search_url, user_badges_url, not_found_error, post_url, base_url, too_many_operations_warning
 from selenium.webdriver.common.by import By
 import pytesseract
 
@@ -93,6 +93,13 @@ class Client():
 
     def _get_request(self, url: str):
         return requests.get(url=url, headers=self.headers)
+    
+    def _check_error(self, data: Any):
+        if 'failed' in data and 'message' in data:
+            if data['message'] == too_many_operations_warning:
+                raise TooManyOperationsException() 
+
+            raise RuntimeError(data['message']) 
 
     def search(self, query: SearchQuery, page: int = 1) -> SearchResult:
         q = pack_query(query)
@@ -104,8 +111,12 @@ class Client():
         r = self._get_request(url)
         try:
             data = r.json()
+            self._check_error(data)
             return SearchResult.from_dict(data)
+        except TooManyOperationsException as e:
+            raise e
         except:
+            print(r.text)
             raise ResponseDataFormatErrorException()
 
     def list_user_badges(self, username: str) -> Optional[UserBadgesInfo]:
@@ -113,9 +124,12 @@ class Client():
         r = self._get_request(url)
         try:
             data = r.json()
+            self._check_error(data)
             if 'errors' in data and not_found_error in data['errors']:
                 return None
             return UserBadgesInfo.from_dict(data)
+        except TooManyOperationsException as e:
+            raise e
         except:
             raise ResponseDataFormatErrorException()
 
@@ -124,8 +138,11 @@ class Client():
         r = self._get_request(url)
         try:
             data = r.json()
+            self._check_error(data)
             if 'errors' in data and not_found_error in data['errors']:
                 return None
             return Post.from_dict(data)
+        except TooManyOperationsException as e:
+            raise e
         except:
             raise ResponseDataFormatErrorException()

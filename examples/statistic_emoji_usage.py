@@ -10,7 +10,18 @@ sys.path.append(parentdir)
 
 from client import Client
 from models.search import SearchQuery
+from exceptions import TooManyOperationsException
 
+def unicode_str_to_emoji(unicode_str):
+    unicode_list = unicode_str.split()
+    emoji = ""
+    for code_point in unicode_list:
+        try:
+            code_point_int = int(code_point, 16)
+            emoji += chr(code_point_int)
+        except ValueError:
+            emoji += f"\\u{code_point}"
+    return emoji
 
 if __name__ == '__main__':
     cookies = ''
@@ -31,10 +42,16 @@ if __name__ == '__main__':
 
     last_post_ids = []
     page_idx = 1
+    # todo: fix failed
     while True:
-        print(page_idx)
-        r = cli.search(SearchQuery(username='凤凰院真凶'), page=page_idx)
-        if last_post_ids == r.grouped_search_result:
+        print(f'统计第{page_idx}页...')
+        try: 
+            r = cli.search(SearchQuery(username='凤凰院真凶'), page=page_idx)
+        except TooManyOperationsException:
+            time.sleep(5)
+            continue
+
+        if last_post_ids == r.grouped_search_result.post_ids:
             break
         page_idx += 1
         last_post_ids = r.grouped_search_result.post_ids
@@ -50,15 +67,16 @@ if __name__ == '__main__':
 
             for matched_emoji in matched_emojis:
                 if matched_emoji in emoji_code_map:
-                    code = emoji_code_map[matched_emoji]
-                    if '-' in code:
-                        parts = code.split('-')
-                        emoji = chr(int(parts[0], 16)) + chr(int(parts[1], 16))
-                    else:
-                        emoji = chr(int(code, 16))
+                    code: str = emoji_code_map[matched_emoji]
+                    code = code.replace('-', ' ')
+                    emoji = unicode_str_to_emoji(code)
                     if emoji not in emoji_usage_statistic:
                         emoji_usage_statistic[emoji] = 0
                     emoji_usage_statistic[emoji] += 1
+        print(emoji_usage_statistic)
         time.sleep(0.5)
-    print(emoji_usage_statistic)
+    sorted_dict = sorted(emoji_usage_statistic.items(), key=lambda x: x[1], reverse=True)
+
+    for key, value in sorted_dict:
+        print(f"{key}: {value}")
     
