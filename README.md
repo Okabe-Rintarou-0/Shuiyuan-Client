@@ -5,7 +5,7 @@
 ## 使用方法
 + 创建 client
     + 手动复制 cookies
-        ```python'
+        ```python
         cli = Client(cookies='COPY_YOUR_COOKIES_HERE')
         ```
     + 提供 jaccount 和密码，通过 selenium 自动获取 cookies
