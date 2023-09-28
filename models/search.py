@@ -1,11 +1,11 @@
 import datetime
-from enum import StrEnum
+from enum import Enum
 from typing import Any, List, Optional
 from models.common import *
 from dataclasses import dataclass, field
 
 
-class SearchQueryOrder(StrEnum):
+class SearchQueryOrder(Enum):
     LATEST = 'latest'
     LIKES = 'likes'
     VIEWS = 'views'
@@ -13,7 +13,7 @@ class SearchQueryOrder(StrEnum):
     NONE = ''
 
 
-class SearchQueryStatus(StrEnum):
+class SearchQueryStatus(Enum):
     OPEN = 'open'
     CLOSED = 'closed'
     PUBLIC = 'public'
@@ -25,7 +25,7 @@ class SearchQueryStatus(StrEnum):
     NONE = ''
 
 
-class SearchQueryIn(StrEnum):
+class SearchQueryIn(Enum):
     TITLE = 'title'
     LIKES = 'likes'
     PERSONAL = 'personal'
