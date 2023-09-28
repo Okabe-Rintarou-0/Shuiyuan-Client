@@ -713,11 +713,11 @@ class User:
     can_edit_email: bool
     can_edit_name: bool
     uploaded_avatar_id: Optional[int]
-    has_title_badges: Optional[bool]
+    has_title_badges: bool
     pending_count: int
     profile_view_count: int
-    second_factor_enabled: Optional[bool]
-    second_factor_backup_enabled: Optional[bool]
+    second_factor_enabled: bool
+    second_factor_backup_enabled: bool
     associated_accounts: List[AssociatedAccount]
     can_upload_profile_header: bool
     can_upload_user_card_background: bool
@@ -739,17 +739,17 @@ class User:
     ignored_usernames: List[Any]
     allowed_pm_usernames: List[Any]
     mailing_list_posts_per_day: Optional[int]
-    can_change_bio: Optional[bool]
-    can_change_location: Optional[bool]
-    can_change_website: Optional[bool]
-    can_change_tracking_preferences: Optional[bool]
+    can_change_bio: bool
+    can_change_location: bool
+    can_change_website: bool
+    can_change_tracking_preferences: bool
     user_api_keys: List[UserAPIKey]
     user_auth_tokens: List[UserAuthToken]
     user_notification_schedule: Optional[UserNotificationSchedule]
-    use_logo_small_as_avatar: Optional[bool]
+    use_logo_small_as_avatar: bool
     sidebar_tags: List[SidebarTag]
     sidebar_category_ids: List[int]
-    display_sidebar_tags: Optional[bool]
+    display_sidebar_tags: bool
     cakedate: datetime
     birthdate: None
     accepted_answers: int
@@ -807,14 +807,11 @@ class User:
         can_edit_name = from_bool(obj.get("can_edit_name"))
         uploaded_avatar_id = from_union(
             [from_int, from_none], obj.get("uploaded_avatar_id"))
-        has_title_badges = from_union(
-            [from_bool, from_none], obj.get("has_title_badges"))
+        has_title_badges = from_bool(obj.get("has_title_badges"))
         pending_count = from_int(obj.get("pending_count"))
         profile_view_count = from_int(obj.get("profile_view_count"))
-        second_factor_enabled = from_union(
-            [from_bool, from_none], obj.get("second_factor_enabled"))
-        second_factor_backup_enabled = from_union(
-            [from_bool, from_none], obj.get("second_factor_backup_enabled"))
+        second_factor_enabled = from_bool(obj.get("second_factor_enabled"))
+        second_factor_backup_enabled = from_bool(obj.get("second_factor_backup_enabled"))
         associated_accounts = from_list(
             AssociatedAccount.from_dict, obj.get("associated_accounts"))
         can_upload_profile_header = from_bool(
@@ -848,27 +845,21 @@ class User:
             lambda x: x, obj.get("allowed_pm_usernames"))
         mailing_list_posts_per_day = from_union(
             [from_int, from_none], obj.get("mailing_list_posts_per_day"))
-        can_change_bio = from_union(
-            [from_bool, from_none], obj.get("can_change_bio"))
-        can_change_location = from_union(
-            [from_bool, from_none], obj.get("can_change_location"))
-        can_change_website = from_union(
-            [from_bool, from_none], obj.get("can_change_website"))
-        can_change_tracking_preferences = from_union(
-            [from_bool, from_none], obj.get("can_change_tracking_preferences"))
+        can_change_bio = from_bool(obj.get("can_change_bio"))
+        can_change_location = from_bool(obj.get("can_change_location"))
+        can_change_website = from_bool(obj.get("can_change_website"))
+        can_change_tracking_preferences = from_bool(obj.get("can_change_tracking_preferences"))
         user_api_keys = from_list(
             UserAPIKey.from_dict, obj.get("user_api_keys"))
         user_auth_tokens = from_list(
             UserAuthToken.from_dict, obj.get("user_auth_tokens"))
         user_notification_schedule = from_union(
             [from_none, UserNotificationSchedule.from_dict], obj.get("user_notification_schedule"))
-        use_logo_small_as_avatar = from_union(
-            [from_bool, from_none], obj.get("use_logo_small_as_avatar"))
+        use_logo_small_as_avatar = from_bool(obj.get("use_logo_small_as_avatar"))
         sidebar_tags = from_list(SidebarTag.from_dict, obj.get("sidebar_tags"))
         sidebar_category_ids = from_list(
             from_int, obj.get("sidebar_category_ids"))
-        display_sidebar_tags = from_union(
-            [from_bool, from_none], obj.get("display_sidebar_tags"))
+        display_sidebar_tags = from_bool(obj.get("display_sidebar_tags"))
         cakedate = from_datetime(obj.get("cakedate"))
         birthdate = from_none(obj.get("birthdate"))
         accepted_answers = from_int(obj.get("accepted_answers"))
@@ -927,14 +918,11 @@ class User:
         result["can_edit_name"] = from_bool(self.can_edit_name)
         result["uploaded_avatar_id"] = from_union(
             [from_int, from_none], self.uploaded_avatar_id)
-        result["has_title_badges"] = from_union(
-            [from_bool, from_none], self.has_title_badges)
+        result["has_title_badges"] = from_bool(self.has_title_badges)
         result["pending_count"] = from_int(self.pending_count)
         result["profile_view_count"] = from_int(self.profile_view_count)
-        result["second_factor_enabled"] = from_union(
-            [from_bool, from_none], self.second_factor_enabled)
-        result["second_factor_backup_enabled"] = from_union(
-            [from_bool, from_none], self.second_factor_backup_enabled)
+        result["second_factor_enabled"] = from_bool(self.second_factor_enabled)
+        result["second_factor_backup_enabled"] = from_bool(self.second_factor_backup_enabled)
         result["associated_accounts"] = from_list(
             AssociatedAccount.from_dict, self.associated_accounts)
         result["can_upload_profile_header"] = from_bool(
@@ -973,28 +961,22 @@ class User:
             lambda x: x, self.allowed_pm_usernames)
         result["mailing_list_posts_per_day"] = from_union(
             [from_int, from_none], self.mailing_list_posts_per_day)
-        result["can_change_bio"] = from_union(
-            [from_bool, from_none], self.can_change_bio)
-        result["can_change_location"] = from_union(
-            [from_bool, from_none], self.can_change_location)
-        result["can_change_website"] = from_union(
-            [from_bool, from_none], self.can_change_website)
-        result["can_change_tracking_preferences"] = from_union(
-            [from_bool, from_none], self.can_change_tracking_preferences)
+        result["can_change_bio"] = from_bool(self.can_change_bio)
+        result["can_change_location"] = from_bool(self.can_change_location)
+        result["can_change_website"] = from_bool(self.can_change_website)
+        result["can_change_tracking_preferences"] = from_bool(self.can_change_tracking_preferences)
         result["user_api_keys"] = from_list(
             lambda x: to_class(UserAPIKey, x), self.user_api_keys)
         result["user_auth_tokens"] = from_list(
             lambda x: to_class(UserAuthToken, x), self.user_auth_tokens)
         result["user_notification_schedule"] = from_union(
             [from_none, UserNotificationSchedule.from_dict], self.user_notification_schedule)
-        result["use_logo_small_as_avatar"] = from_union(
-            [from_bool, from_none], self.use_logo_small_as_avatar)
+        result["use_logo_small_as_avatar"] = from_bool(self.use_logo_small_as_avatar)
         result["sidebar_tags"] = from_list(
             lambda x: to_class(SidebarTag, x), self.sidebar_tags)
         result["sidebar_category_ids"] = from_list(
             from_int, self.sidebar_category_ids)
-        result["display_sidebar_tags"] = from_union(
-            [from_bool, from_none], self.display_sidebar_tags)
+        result["display_sidebar_tags"] = from_bool(self.display_sidebar_tags)
         result["cakedate"] = self.cakedate.isoformat()
         result["birthdate"] = from_none(self.birthdate)
         result["accepted_answers"] = from_int(self.accepted_answers)
@@ -1090,7 +1072,7 @@ class UserAction:
     acting_user_id: int
     title: str
     deleted: bool
-    hidden: Optional[bool]
+    hidden: bool
     post_type: Optional[int]
     action_code: Optional[str]
     category_id: int
@@ -1120,7 +1102,7 @@ class UserAction:
         acting_user_id = from_int(obj.get("acting_user_id"))
         title = from_str(obj.get("title"))
         deleted = from_bool(obj.get("deleted"))
-        hidden = from_union([from_bool, from_none], obj.get("hidden"))
+        hidden = from_bool(obj.get("hidden"))
         post_type = from_union([from_int, from_none], obj.get("post_type"))
         action_code = from_union([from_str, from_none], obj.get("action_code"))
         category_id = from_int(obj.get("category_id"))
@@ -1151,7 +1133,7 @@ class UserAction:
         result["acting_user_id"] = from_int(self.acting_user_id)
         result["title"] = from_str(self.title)
         result["deleted"] = from_bool(self.deleted)
-        result["hidden"] = from_union([from_bool, from_none], self.hidden)
+        result["hidden"] = from_bool(self.hidden)
         result["post_type"] = from_union([from_int, from_none], self.post_type)
         result["action_code"] = from_union([from_str, from_none], self.action_code)
         result["category_id"] = from_int(self.category_id)

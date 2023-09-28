@@ -6,21 +6,21 @@ from dataclasses import dataclass
 @dataclass
 class ActionsSummary:
     id: int
-    can_act: Optional[bool]
+    can_act: bool
     count: Optional[int]
 
     @staticmethod
     def from_dict(obj: Any) -> 'ActionsSummary':
         assert isinstance(obj, dict)
         id = from_int(obj.get("id"))
-        can_act = from_union([from_bool, from_none], obj.get("can_act"))
+        can_act = from_bool(obj.get("can_act"))
         count = from_union([from_int, from_none], obj.get("count"))
         return ActionsSummary(id, can_act, count)
 
     def to_dict(self) -> dict:
         result: dict = {}
         result["id"] = from_int(self.id)
-        result["can_act"] = from_union([from_bool, from_none], self.can_act)
+        result["can_act"] = from_bool(self.can_act)
         result["count"] = from_union([from_int, from_none], self.count)
         return result
 

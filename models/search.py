@@ -64,7 +64,7 @@ class GroupedSearchResult:
     more_categories: None
     term: str
     search_log_id: int
-    more_full_page_results: Optional[bool]
+    more_full_page_results: bool
     can_create_topic: bool
     error: None
     post_ids: List[int]
@@ -81,8 +81,7 @@ class GroupedSearchResult:
         more_categories = from_none(obj.get("more_categories"))
         term = from_str(obj.get("term"))
         search_log_id = from_int(obj.get("search_log_id"))
-        more_full_page_results = from_union(
-            [from_bool, from_none], obj.get("more_full_page_results"))
+        more_full_page_results = from_bool(obj.get("more_full_page_results"))
         can_create_topic = from_bool(obj.get("can_create_topic"))
         error = from_none(obj.get("error"))
         post_ids = from_list(from_int, obj.get("post_ids"))
@@ -99,9 +98,7 @@ class GroupedSearchResult:
         result["more_categories"] = from_none(self.more_categories)
         result["term"] = from_str(self.term)
         result["search_log_id"] = from_int(self.search_log_id)
-        result["more_full_page_results"] = from_union(
-            [from_bool, from_none],
-            self.more_full_page_results)
+        result["more_full_page_results"] = from_bool(self.more_full_page_results)
         result["can_create_topic"] = from_bool(self.can_create_topic)
         result["error"] = from_none(self.error)
         result["post_ids"] = from_list(from_int, self.post_ids)
@@ -175,8 +172,8 @@ class Topic:
     visible: bool
     closed: bool
     archived: bool
-    bookmarked: Optional[bool]
-    liked: Optional[bool]
+    bookmarked: bool
+    liked: bool
     tags: List[str]
     tags_descriptions: Any
     category_id: int
@@ -208,8 +205,8 @@ class Topic:
         visible = from_bool(obj.get("visible"))
         closed = from_bool(obj.get("closed"))
         archived = from_bool(obj.get("archived"))
-        bookmarked = from_union([from_bool, from_none], obj.get("bookmarked"))
-        liked = from_union([from_bool, from_none], obj.get("liked"))
+        bookmarked = from_bool(obj.get("bookmarked"))
+        liked = from_bool(obj.get("liked"))
         tags = from_list(from_str, obj.get("tags"))
         tags_descriptions = obj.get("tags_descriptions")
         category_id = from_int(obj.get("category_id"))
@@ -243,9 +240,8 @@ class Topic:
         result["visible"] = from_bool(self.visible)
         result["closed"] = from_bool(self.closed)
         result["archived"] = from_bool(self.archived)
-        result["bookmarked"] = from_union(
-            [from_bool, from_none], self.bookmarked)
-        result["liked"] = from_union([from_bool, from_none], self.liked)
+        result["bookmarked"] = from_bool(self.bookmarked)
+        result["liked"] = from_bool(self.liked)
         result["tags"] = from_list(from_str, self.tags)
         result["tags_descriptions"] = self.tags_descriptions,
         result["category_id"] = from_int(self.category_id)

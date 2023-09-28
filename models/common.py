@@ -24,6 +24,8 @@ def from_int(x: Any) -> int:
 
 
 def from_bool(x: Any) -> bool:
+    if x is None:
+        return False
     assert isinstance(x, bool)
     return x
 
