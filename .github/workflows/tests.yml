@@ -32,4 +32,4 @@ jobs:
           
         # Run the tests. I'm using pytest and the file is in the tests directory.
       - name: Run tests
-        run: pytest tests/test*
+        run: USER_API_KEY=${{ env.USER_API_KEY }} pytest tests/test*
