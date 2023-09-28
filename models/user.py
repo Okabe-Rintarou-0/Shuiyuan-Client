@@ -1033,3 +1033,153 @@ class UserInfo:
         result: dict = {}
         result["user_badges"] = self.user_badges
         result["user"] = self.user.to_dict()
+
+
+@dataclass
+class UserEmailInfo:
+    email: Optional[str]
+    secondary_emails: List[Any]
+    unconfirmed_emails: List[Any]
+    associated_accounts: List[Any]
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'UserEmailInfo':
+        assert isinstance(obj, dict)
+        email = from_union([from_str, from_none], obj.get("email"))
+        secondary_emails = obj.get("secondary_emails")
+        unconfirmed_emails = obj.get("unconfirmed_emails")
+        associated_accounts = obj.get("associated_accounts")
+        return UserEmailInfo(email, secondary_emails, unconfirmed_emails, associated_accounts)
+
+    def to_dict(self) -> dict:
+        result: dict = {}
+        result["email"] = from_union([from_str, from_none], self.email)
+        result["secondary_emails"] = self.secondary_emails
+        result["unconfirmed_emails"] = self.unconfirmed_emails
+        result["associated_accounts"] = self.associated_accounts
+        return result
+
+
+def user_email_info_from_dict(s: Any) -> UserEmailInfo:
+    return UserEmailInfo.from_dict(s)
+
+
+def user_email_info_to_dict(x: UserEmailInfo) -> Any:
+    return to_class(UserEmailInfo, x)
+
+
+@dataclass
+class UserAction:
+    excerpt: str
+    action_type: int
+    created_at: str
+    avatar_template: str
+    acting_avatar_template: str
+    slug: str
+    topic_id: int
+    target_user_id: int
+    target_name: str
+    target_username: str
+    post_number: int
+    post_id: Optional[int]
+    username: str
+    name: str
+    user_id: int
+    acting_username: str
+    acting_name: str
+    acting_user_id: int
+    title: str
+    deleted: bool
+    hidden: Optional[bool]
+    post_type: Optional[int]
+    action_code: Optional[str]
+    category_id: int
+    closed: bool
+    archived: bool
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'UserAction':
+        assert isinstance(obj, dict)
+        excerpt = from_str(obj.get("excerpt"))
+        action_type = from_int(obj.get("action_type"))
+        created_at = from_str(obj.get("created_at"))
+        avatar_template = from_str(obj.get("avatar_template"))
+        acting_avatar_template = from_str(obj.get("acting_avatar_template"))
+        slug = from_str(obj.get("slug"))
+        topic_id = from_int(obj.get("topic_id"))
+        target_user_id = from_int(obj.get("target_user_id"))
+        target_name = from_str(obj.get("target_name"))
+        target_username = from_str(obj.get("target_username"))
+        post_number = from_int(obj.get("post_number"))
+        post_id = from_union([from_int, from_none], obj.get("post_id"))
+        username = from_str(obj.get("username"))
+        name = from_str(obj.get("name"))
+        user_id = from_int(obj.get("user_id"))
+        acting_username = from_str(obj.get("acting_username"))
+        acting_name = from_str(obj.get("acting_name"))
+        acting_user_id = from_int(obj.get("acting_user_id"))
+        title = from_str(obj.get("title"))
+        deleted = from_bool(obj.get("deleted"))
+        hidden = from_union([from_bool, from_none], obj.get("hidden"))
+        post_type = from_union([from_int, from_none], obj.get("post_type"))
+        action_code = from_union([from_str, from_none], obj.get("action_code"))
+        category_id = from_int(obj.get("category_id"))
+        closed = from_bool(obj.get("closed"))
+        archived = from_bool(obj.get("archived"))
+        return UserAction(excerpt, action_type, created_at, avatar_template, acting_avatar_template, slug, topic_id, target_user_id, target_name, target_username, post_number, post_id, username, name, user_id, acting_username, acting_name, acting_user_id, title, deleted, hidden, post_type, action_code, category_id, closed, archived)
+
+    def to_dict(self) -> dict:
+        result: dict = {}
+        result["excerpt"] = from_str(self.excerpt)
+        result["action_type"] = from_int(self.action_type)
+        result["created_at"] = from_str(self.created_at)
+        result["avatar_template"] = from_str(self.avatar_template)
+        result["acting_avatar_template"] = from_str(
+            self.acting_avatar_template)
+        result["slug"] = from_str(self.slug)
+        result["topic_id"] = from_int(self.topic_id)
+        result["target_user_id"] = from_int(self.target_user_id)
+        result["target_name"] = from_str(self.target_name)
+        result["target_username"] = from_str(self.target_username)
+        result["post_number"] = from_int(self.post_number)
+        result["post_id"] = from_union([from_int, from_none], self.post_id)
+        result["username"] = from_str(self.username)
+        result["name"] = from_str(self.name)
+        result["user_id"] = from_int(self.user_id)
+        result["acting_username"] = from_str(self.acting_username)
+        result["acting_name"] = from_str(self.acting_name)
+        result["acting_user_id"] = from_int(self.acting_user_id)
+        result["title"] = from_str(self.title)
+        result["deleted"] = from_bool(self.deleted)
+        result["hidden"] = from_union([from_bool, from_none], self.hidden)
+        result["post_type"] = from_union([from_int, from_none], self.post_type)
+        result["action_code"] = from_union([from_str, from_none], self.action_code)
+        result["category_id"] = from_int(self.category_id)
+        result["closed"] = from_bool(self.closed)
+        result["archived"] = from_bool(self.archived)
+        return result
+
+
+@dataclass
+class UserActionsInfo:
+    user_actions: List[UserAction]
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'UserActionsInfo':
+        assert isinstance(obj, dict)
+        user_actions = from_list(UserAction.from_dict, obj.get("user_actions"))
+        return UserActionsInfo(user_actions)
+
+    def to_dict(self) -> dict:
+        result: dict = {}
+        result["user_actions"] = from_list(
+            lambda x: to_class(UserAction, x), self.user_actions)
+        return result
+
+
+def user_actions_from_dict(s: Any) -> UserActionsInfo:
+    return UserActionsInfo.from_dict(s)
+
+
+def user_actions_to_dict(x: UserActionsInfo) -> Any:
+    return to_class(UserActionsInfo, x)

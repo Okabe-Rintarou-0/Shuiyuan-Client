@@ -1,19 +1,21 @@
 import time
-from typing import Any, Optional, Union
+from typing import Any, Callable, Optional, TypeVar, Union
 from urllib.parse import urlencode
 import requests
 from exceptions import ResponseDataFormatErrorException, TooManyOperationsException
 
 from models.search import SearchQuery, SearchResult
-from models.user import UserBadgesInfo, UserInfo
+from models.user import UserActionsInfo, UserBadgesInfo, UserEmailInfo, UserInfo
 from models.post import Post
 
 from selenium import webdriver
 
 from utils import pack_query
-from constants import search_url, user_badges_url, not_found_error, post_url, base_url, too_many_operations_warning
+from constants import search_url, user_badges_url, not_found_error, post_url, user_actions_url, base_url, too_many_operations_warning
 from selenium.webdriver.common.by import By
 import pytesseract
+
+T = TypeVar("T")
 
 
 class Client():
@@ -93,17 +95,29 @@ class Client():
 
     def _get_request(self, url: str):
         return requests.get(url=url, headers=self.headers)
-    
+
     def _check_error(self, data: Any) -> bool:
         if 'failed' in data and 'message' in data:
             if data['message'] == too_many_operations_warning:
-                raise TooManyOperationsException() 
+                raise TooManyOperationsException()
 
             raise RuntimeError(data['message'])
-        
+
         if 'errors' in data and not_found_error in data['errors']:
             return False
         return True
+
+    def _json_response_wrapper(self, r: requests.Response, f: Callable[[Any], T]) -> T | None:
+        try:
+            data = r.json()
+            if self._check_error(data):
+                return f(data)
+            return None
+        except TooManyOperationsException as e:
+            raise e
+        except:
+            print(r.text)
+            raise ResponseDataFormatErrorException()
 
     def search(self, query: SearchQuery, page: int = 1) -> SearchResult:
         q = pack_query(query)
@@ -113,53 +127,37 @@ class Client():
         }
         url = search_url + urlencode(params)
         r = self._get_request(url)
-        try:
-            data = r.json()
-            self._check_error(data)
-            return SearchResult.from_dict(data)
-        except TooManyOperationsException as e:
-            raise e
-        except:
-            print(r.text)
-            raise ResponseDataFormatErrorException()
-        
+        return self._json_response_wrapper(r, SearchResult.from_dict)
+
     def get_user_by_username(self, username: str) -> Optional[UserInfo]:
         url = f'{base_url}/u/{username}.json'
         r = self._get_request(url)
-        try:
-            data = r.json()
-            if not self._check_error(data):
-                return None
-            return UserInfo.from_dict(data)
-        except TooManyOperationsException as e:
-            raise e
-        except:
-            print(r.text)
-            raise ResponseDataFormatErrorException()
+        return self._json_response_wrapper(r, UserInfo.from_dict)
 
     def list_user_badges(self, username: str) -> Optional[UserBadgesInfo]:
-        url = user_badges_url + f'/{username}.json'
+        url = f'{user_badges_url}/{username}.json'
         r = self._get_request(url)
-        try:
-            data = r.json()
-            if not self._check_error(data):
-                return None
-            return UserBadgesInfo.from_dict(data)
-        except TooManyOperationsException as e:
-            raise e
-        except:
-            raise ResponseDataFormatErrorException()
+        return self._json_response_wrapper(r, UserBadgesInfo.from_dict)
 
     def retrieve_single_post(self, id: str) -> Optional[Post]:
-        url = post_url + f'/{id}.json'
+        url = f'{post_url}/{id}.json'
         r = self._get_request(url)
-        try:
-            data = r.json()
-            if not self._check_error(data):
-                return None
-            return Post.from_dict(data)
-        except TooManyOperationsException as e:
-            raise e
-        except:
-            raise ResponseDataFormatErrorException()
+        return self._json_response_wrapper(r, Post.from_dict)
 
+    def get_user_email(self, username: str) -> Optional[UserEmailInfo]:
+        url = f'{base_url}/u/{username}/emails.json'
+        r = self._get_request(url)
+        return self._json_response_wrapper(r, UserEmailInfo.from_dict)
+
+    def get_user_actions(self, username: str, filter: str = '', offset: Optional[int] = None) -> Optional[UserActionsInfo]:
+        params = {
+            'username': username
+        }
+        if len(filter) > 0:
+            params['filter'] = filter
+        if offset is not None:
+            params['offset'] = offset
+        
+        url = user_actions_url + urlencode(params)
+        r = self._get_request(url)
+        return self._json_response_wrapper(r, UserActionsInfo.from_dict)

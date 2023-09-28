@@ -1,5 +1,6 @@
 base_url = 'https://shuiyuan.sjtu.edu.cn'
 search_url = f'{base_url}/search.json?'
+user_actions_url = f'{base_url}/user_actions.json?'
 user_badges_url = f'{base_url}/user-badges'
 post_url = f'{base_url}/posts'
 not_found_error = '找不到请求的 URL 或资源。'
