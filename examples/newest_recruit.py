@@ -34,7 +34,7 @@ if __name__ == '__main__':
         created_at = topic.created_at
         created_at = created_at.strftime("%Y年%m月%d日 %H时%M分%S秒")
 
-        url = f'{base_url}/t/topic/{id}'
+        url = f'{base_url}/t/topic/{topic.id}'
         out_data['标题'].append(topic.title)
         out_data['url'].append(url)
         out_data['发布日期'].append(created_at)

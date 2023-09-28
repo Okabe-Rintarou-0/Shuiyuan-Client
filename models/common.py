@@ -29,6 +29,8 @@ def from_bool(x: Any) -> bool:
 
 
 def from_list(f: Callable[[Any], T], x: Any) -> List[T]:
+    if x is None:
+        return []
     assert isinstance(x, list)
     return [f(y) for y in x]
 

@@ -81,7 +81,8 @@ class GroupedSearchResult:
         more_categories = from_none(obj.get("more_categories"))
         term = from_str(obj.get("term"))
         search_log_id = from_int(obj.get("search_log_id"))
-        more_full_page_results = from_union([from_bool, from_none], obj.get("more_full_page_results"))
+        more_full_page_results = from_union(
+            [from_bool, from_none], obj.get("more_full_page_results"))
         can_create_topic = from_bool(obj.get("can_create_topic"))
         error = from_none(obj.get("error"))
         post_ids = from_list(from_int, obj.get("post_ids"))
@@ -207,8 +208,8 @@ class Topic:
         visible = from_bool(obj.get("visible"))
         closed = from_bool(obj.get("closed"))
         archived = from_bool(obj.get("archived"))
-        bookmarked = from_union([from_none, from_bool], obj.get("bookmarked"))
-        liked = from_union([from_none, from_bool], obj.get("liked"))
+        bookmarked = from_union([from_bool, from_none], obj.get("bookmarked"))
+        liked = from_union([from_bool, from_none], obj.get("liked"))
         tags = from_list(from_str, obj.get("tags"))
         tags_descriptions = obj.get("tags_descriptions")
         category_id = from_int(obj.get("category_id"))
@@ -243,8 +244,8 @@ class Topic:
         result["closed"] = from_bool(self.closed)
         result["archived"] = from_bool(self.archived)
         result["bookmarked"] = from_union(
-            [from_none, from_bool], self.bookmarked)
-        result["liked"] = from_union([from_none, from_bool], self.liked)
+            [from_bool, from_none], self.bookmarked)
+        result["liked"] = from_union([from_bool, from_none], self.liked)
         result["tags"] = from_list(from_str, self.tags)
         result["tags_descriptions"] = self.tags_descriptions,
         result["category_id"] = from_int(self.category_id)
@@ -263,7 +264,7 @@ class Topic:
 @dataclass
 class SearchResult:
     posts: List[Post]
-    topics: Optional[List[Topic]]
+    topics: List[Topic]
     users: List[Any]
     categories: List[Any]
     tags: List[Any]
@@ -274,7 +275,7 @@ class SearchResult:
     def from_dict(obj: Any) -> 'SearchResult':
         assert isinstance(obj, dict)
         posts = from_list(Post.from_dict, obj.get("posts"))
-        topics = from_union([lambda x: from_list(Topic.from_dict, x), from_none], obj.get("topics"))
+        topics = from_list(Topic.from_dict, obj.get("topics"))
         users = from_list(lambda x: x, obj.get("users"))
         categories = from_list(lambda x: x, obj.get("categories"))
         tags = from_list(lambda x: x, obj.get("tags"))
@@ -286,7 +287,7 @@ class SearchResult:
     def to_dict(self) -> dict:
         result: dict = {}
         result["posts"] = from_list(lambda x: to_class(Post, x), self.posts)
-        result["topics"] = from_union([lambda x: from_list(lambda x: to_class(Topic, x), x), from_none], self.topics)
+        result["topics"] = from_list(Topic.from_dict, self.topics)
         result["users"] = from_list(lambda x: x, self.users)
         result["categories"] = from_list(lambda x: x, self.categories)
         result["tags"] = from_list(lambda x: x, self.tags)

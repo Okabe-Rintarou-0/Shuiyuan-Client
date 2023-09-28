@@ -179,7 +179,7 @@ class Post:
         result["updated_at"] = self.updated_at.isoformat()
         result["reply_count"] = from_int(self.reply_count)
         result["reply_to_post_number"] = from_union(
-            [from_none, from_int], self.reply_to_post_number)
+            [from_int, from_none], self.reply_to_post_number)
         result["quote_count"] = from_int(self.quote_count)
         result["incoming_link_count"] = from_int(self.incoming_link_count)
         result["reads"] = from_int(self.reads)
