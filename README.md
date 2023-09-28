@@ -1,5 +1,7 @@
 # Shuiyuan Client
 
+![python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)
+
 [水源社区](https://shuiyuan.sjtu.edu.cn/)是交大人日常必备的网站之一，社区里有非常丰富的资源和信息，开发一个便于调用接口的 client 比较有必要。
 
 ## 使用方法
