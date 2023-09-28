@@ -20,5 +20,5 @@ def test_get_user_actions():
     cli = Client(user_api_key=user_api_key)
     r = cli.get_user_actions('addda')
     print(len(r.user_actions))
-    r = cli.get_user_by_username('凤凰院真凶')
+    r = cli.get_user_actions('凤凰院真凶')
     print(len(r.user_actions))
