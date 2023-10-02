@@ -1,3 +1,4 @@
+beautifulsoup4==4.12.2
 cryptography==39.0.1
 pandas==1.5.3
 pytesseract==0.3.10
