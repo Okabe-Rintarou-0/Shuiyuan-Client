@@ -167,3 +167,8 @@ class Client():
         url = user_actions_url + urlencode(params)
         r = self._get_request(url)
         return self._json_response_wrapper(r, UserActionsInfo.from_dict)
+    
+    def download_image(self, imgsrc: str, path: str):
+        r = self._get_request(imgsrc)
+        with open(path, 'wb') as f:
+            f.write(r.content)

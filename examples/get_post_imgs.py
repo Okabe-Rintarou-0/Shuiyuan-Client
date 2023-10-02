@@ -15,16 +15,15 @@ if __name__ == '__main__':
     cli = Client(cookies=cookies)
     post = cli.retrieve_single_post(2110122)
 
-    from bs4 import BeautifulSoup
-    soup = BeautifulSoup(post.cooked)
-    imgs = soup.find_all('img')
-    for img in imgs:
-        src = img.get('src')
-        # print(src)
+    os.mkdir("good_stuff")
+    dir = "good_stuff"
 
-        # You can deal with srcset as well ^_^.
-        src_set = img.get('srcset')
-        print(src_set)
+    imgs = post.get_imgs()
+    for (i, img) in enumerate(imgs):
+        save_path = os.path.join(dir, f'{i}.jpeg')
+        cli.download_image(img.src, save_path)
+
+
     
 
     

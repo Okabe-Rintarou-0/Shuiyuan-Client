@@ -1,6 +1,18 @@
-from typing import Optional
+import os
+from typing import Dict, Optional
+
+import requests
 from models.common import *
 from dataclasses import dataclass
+from bs4 import BeautifulSoup
+
+
+@dataclass
+class PostImage:
+    src: str
+    src_set: Dict[str, str]
+    height: int
+    width: int
 
 
 @dataclass
@@ -226,6 +238,32 @@ class Post:
         result["topic_accepted_answer"] = from_bool(self.topic_accepted_answer)
         result["retorts"] = from_list(lambda x: x, self.retorts)
         return result
+
+    def get_imgs(self) -> List[PostImage]:
+        soup = BeautifulSoup(self.cooked, 'html.parser')
+        imgs = soup.find_all("img", attrs={"src": True})
+        ret = []
+        for img in imgs:
+            src = img.get("src")
+            src_set_attr: str = img.get("srcset")
+            src_set_parts = src_set_attr.split(',')
+            src_set = {}
+            for part in src_set_parts:
+                part = part.strip()
+                pair = part.split(' ')
+                if len(pair) == 2:
+                    url, times = pair[0], pair[1]
+                    src_set[times] = url
+            height_attr: str = img.get("height")
+            width_attr: str = img.get("width")
+            height = width = 0
+            if height_attr.isdigit():
+                height = int(height_attr)
+            if width_attr.isdigit():
+                width = int(width_attr)
+            ret.append(PostImage(src, src_set, height, width))
+
+        return ret
 
 
 def post_from_dict(s: Any) -> Post:
