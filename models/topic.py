@@ -60,12 +60,12 @@ class Participant:
     name: str
     avatar_template: str
     post_count: int
-    primary_group_name: Optional[str]
-    flair_name: Optional[str]
-    flair_url: Optional[str]
-    flair_color: Optional[str]
-    flair_bg_color: Optional[str]
-    flair_group_id: Optional[int]
+    primary_group_name: str
+    flair_name: str
+    flair_url: str
+    flair_color: str
+    flair_bg_color: str
+    flair_group_id: int
     admin: bool
     moderator: bool
     trust_level: int
@@ -78,18 +78,12 @@ class Participant:
         name = from_str(obj.get("name"))
         avatar_template = from_str(obj.get("avatar_template"))
         post_count = from_int(obj.get("post_count"))
-        primary_group_name = from_union(
-            [from_str, from_none], obj.get("primary_group_name"))
-        flair_name = from_union(
-            [from_str, from_none], obj.get("flair_name"))
-        flair_url = from_union(
-            [from_str, from_none], obj.get("flair_url"))
-        flair_color = from_union(
-            [from_str, from_none], obj.get("flair_color"))
-        flair_bg_color = from_union(
-            [from_str, from_none], obj.get("flair_bg_color"))
-        flair_group_id = from_union(
-            [from_int, from_none], obj.get("flair_group_id"))
+        primary_group_name = from_str(obj.get("primary_group_name"))
+        flair_name = from_str(obj.get("flair_name"))
+        flair_url = from_str(obj.get("flair_url"))
+        flair_color = from_str(obj.get("flair_color"))
+        flair_bg_color = from_str(obj.get("flair_bg_color"))
+        flair_group_id = from_int(obj.get("flair_group_id"))
         admin = from_bool(obj.get("admin"))
         moderator = from_bool(obj.get("moderator"))
         trust_level = from_int(obj.get("trust_level"))
@@ -102,18 +96,12 @@ class Participant:
         result["name"] = from_str(self.name)
         result["avatar_template"] = from_str(self.avatar_template)
         result["post_count"] = from_int(self.post_count)
-        result["primary_group_name"] = from_union(
-            [from_str, from_none], self.primary_group_name)
-        result["flair_name"] = from_union(
-            [from_str, from_none], self.flair_name)
-        result["flair_url"] = from_union(
-            [from_str, from_none], self.flair_url)
-        result["flair_color"] = from_union(
-            [from_str, from_none], self.flair_color)
-        result["flair_bg_color"] = from_union(
-            [from_str, from_none], self.flair_bg_color)
-        result["flair_group_id"] = from_union(
-            [from_int, from_none], self.flair_group_id)
+        result["primary_group_name"] = from_str(self.primary_group_name)
+        result["flair_name"] = from_str(self.flair_name)
+        result["flair_url"] = from_str(self.flair_url)
+        result["flair_color"] = from_str(self.flair_color)
+        result["flair_bg_color"] = from_str(self.flair_bg_color)
+        result["flair_group_id"] = from_int(self.flair_group_id)
         result["admin"] = from_bool(self.admin)
         result["moderator"] = from_bool(self.moderator)
         result["trust_level"] = from_int(self.trust_level)
@@ -141,7 +129,7 @@ class Details:
     can_toggle_topic_visibility: bool
     can_pin_unpin_topic: bool
     can_moderate_category: bool
-    can_remove_self_id: Optional[int]
+    can_remove_self_id: int
     participants: List[Participant]
     created_by: CreatedBy
     last_poster: CreatedBy
@@ -170,8 +158,7 @@ class Details:
             obj.get("can_toggle_topic_visibility"))
         can_pin_unpin_topic = from_bool(obj.get("can_pin_unpin_topic"))
         can_moderate_category = from_bool(obj.get("can_moderate_category"))
-        can_remove_self_id = from_union(
-            [from_int, from_none], obj.get("can_remove_self_id"))
+        can_remove_self_id = from_int(obj.get("can_remove_self_id"))
         participants = from_list(
             Participant.from_dict, obj.get("participants"))
         created_by = CreatedBy.from_dict(obj.get("created_by"))
@@ -202,8 +189,7 @@ class Details:
             self.can_toggle_topic_visibility)
         result["can_pin_unpin_topic"] = from_bool(self.can_pin_unpin_topic)
         result["can_moderate_category"] = from_bool(self.can_moderate_category)
-        result["can_remove_self_id"] = from_union(
-            [from_int, from_none], self.can_remove_self_id)
+        result["can_remove_self_id"] = from_int(self.can_remove_self_id)
         result["participants"] = from_list(
             lambda x: to_class(Participant, x), self.participants)
         result["created_by"] = to_class(CreatedBy, self.created_by)
@@ -235,7 +221,7 @@ class LinkCount:
     url: str
     internal: bool
     reflection: bool
-    title: Optional[str]
+    title: str
     clicks: int
 
     @staticmethod
@@ -244,7 +230,7 @@ class LinkCount:
         url = from_str(obj.get("url"))
         internal = from_bool(obj.get("internal"))
         reflection = from_bool(obj.get("reflection"))
-        title = from_union([from_str, from_none], obj.get("title"))
+        title = from_str(obj.get("title"))
         clicks = from_int(obj.get("clicks"))
         return LinkCount(url, internal, reflection, title, clicks)
 
@@ -253,7 +239,7 @@ class LinkCount:
         result["url"] = from_str(self.url)
         result["internal"] = from_bool(self.internal)
         result["reflection"] = from_bool(self.reflection)
-        result["title"] = from_union([from_str, from_none], self.title)
+        result["title"] = from_str(self.title)
         result["clicks"] = from_int(self.clicks)
         return result
 
@@ -280,11 +266,11 @@ class Post:
     topic_id: int
     topic_slug: str
     display_username: str
-    primary_group_name: Optional[str]
-    flair_name: Optional[str]
-    flair_url: Optional[str]
-    flair_bg_color: Optional[str]
-    flair_color: Optional[str]
+    primary_group_name: str
+    flair_name: str
+    flair_url: str
+    flair_bg_color: str
+    flair_color: str
     version: int
     can_edit: bool
     can_delete: bool
@@ -293,7 +279,7 @@ class Post:
     can_wiki: bool
     link_counts: List[LinkCount]
     read: bool
-    user_title: Optional[str]
+    user_title: str
     bookmarked: bool
     actions_summary: List[PostActionsSummary]
     moderator: bool
@@ -302,13 +288,13 @@ class Post:
     user_id: int
     hidden: bool
     trust_level: int
-    deleted_at: Optional[str]
+    deleted_at: str
     user_deleted: bool
-    edit_reason: Optional[str]
+    edit_reason: str
     can_view_edit_history: bool
     wiki: bool
-    reviewable_id: Optional[int]
-    reviewable_score_count: Optional[int]
+    reviewable_id: int
+    reviewable_score_count: int
     reviewable_score_pending_count: int
 
     @staticmethod
@@ -324,8 +310,7 @@ class Post:
         post_type = from_int(obj.get("post_type"))
         updated_at = from_str(obj.get("updated_at"))
         reply_count = from_int(obj.get("reply_count"))
-        reply_to_post_number = from_union(
-            [from_int, from_none], obj.get("reply_to_post_number"))
+        reply_to_post_number = from_int(obj.get("reply_to_post_number"))
         quote_count = from_int(obj.get("quote_count"))
         incoming_link_count = from_int(obj.get("incoming_link_count"))
         reads = from_int(obj.get("reads"))
@@ -335,13 +320,11 @@ class Post:
         topic_id = from_int(obj.get("topic_id"))
         topic_slug = from_str(obj.get("topic_slug"))
         display_username = from_str(obj.get("display_username"))
-        primary_group_name = from_union(
-            [from_str, from_none], obj.get("primary_group_name"))
-        flair_name = from_union([from_str, from_none], obj.get("flair_name"))
-        flair_url = from_union([from_str, from_none], obj.get("flair_url"))
-        flair_bg_color = from_union(
-            [from_str, from_none], obj.get("flair_bg_color"))
-        flair_color = from_union([from_str, from_none], obj.get("flair_color"))
+        primary_group_name = from_str(obj.get("primary_group_name"))
+        flair_name = from_str(obj.get("flair_name"))
+        flair_url = from_str(obj.get("flair_url"))
+        flair_bg_color = from_str(obj.get("flair_bg_color"))
+        flair_color = from_str(obj.get("flair_color"))
         version = from_int(obj.get("version"))
         can_edit = from_bool(obj.get("can_edit"))
         can_delete = from_bool(obj.get("can_delete"))
@@ -350,7 +333,7 @@ class Post:
         can_wiki = from_bool(obj.get("can_wiki"))
         link_counts = from_list(LinkCount.from_dict, obj.get("link_counts"))
         read = from_bool(obj.get("read"))
-        user_title = from_union([from_str, from_none], obj.get("user_title"))
+        user_title = from_str(obj.get("user_title"))
         bookmarked = from_bool(obj.get("bookmarked"))
         actions_summary = from_list(
             PostActionsSummary.from_dict, obj.get("actions_summary"))
@@ -360,17 +343,15 @@ class Post:
         user_id = from_int(obj.get("user_id"))
         hidden = from_bool(obj.get("hidden"))
         trust_level = from_int(obj.get("trust_level"))
-        deleted_at = from_union([from_str, from_none], obj.get("deleted_at"))
+        deleted_at = from_str(obj.get("deleted_at"))
         user_deleted = from_bool(obj.get("user_deleted"))
-        edit_reason = from_union([from_str, from_none], obj.get("edit_reason"))
+        edit_reason = from_str(obj.get("edit_reason"))
         can_view_edit_history = from_bool(obj.get("can_view_edit_history"))
         wiki = from_bool(obj.get("wiki"))
-        reviewable_id = from_union(
-            [from_int, from_none], obj.get("reviewable_id"))
-        reviewable_score_count = from_union(
-            [from_int, from_none], obj.get("reviewable_score_count"))
-        reviewable_score_pending_count = from_union(
-            [from_int, from_none], obj.get("reviewable_score_pending_count"))
+        reviewable_id = from_int(obj.get("reviewable_id"))
+        reviewable_score_count = from_int(obj.get("reviewable_score_count"))
+        reviewable_score_pending_count = from_int(
+            obj.get("reviewable_score_pending_count"))
         return Post(id, name, username, avatar_template, created_at, cooked, post_number, post_type, updated_at, reply_count, reply_to_post_number, quote_count, incoming_link_count, reads, readers_count, score, yours, topic_id, topic_slug, display_username, primary_group_name, flair_name, flair_url, flair_bg_color, flair_color, version, can_edit, can_delete, can_recover, can_see_hidden_post, can_wiki, link_counts, read, user_title, bookmarked, actions_summary, moderator, admin, staff, user_id, hidden, trust_level, deleted_at, user_deleted, edit_reason, can_view_edit_history, wiki, reviewable_id, reviewable_score_count, reviewable_score_pending_count)
 
     def to_dict(self) -> dict:
@@ -385,8 +366,7 @@ class Post:
         result["post_type"] = from_int(self.post_type)
         result["updated_at"] = from_str(self.updated_at)
         result["reply_count"] = from_int(self.reply_count)
-        result["reply_to_post_number"] = from_union(
-            [from_int, from_none], self.reply_to_post_number)
+        result["reply_to_post_number"] = from_int(self.reply_to_post_number)
         result["quote_count"] = from_int(self.quote_count)
         result["incoming_link_count"] = from_int(self.incoming_link_count)
         result["reads"] = from_int(self.reads)
@@ -396,15 +376,11 @@ class Post:
         result["topic_id"] = from_int(self.topic_id)
         result["topic_slug"] = from_str(self.topic_slug)
         result["display_username"] = from_str(self.display_username)
-        result["primary_group_name"] = from_union(
-            [from_str, from_none], self.primary_group_name)
-        result["flair_name"] = from_union(
-            [from_str, from_none], self.flair_name)
-        result["flair_url"] = from_union([from_str, from_none], self.flair_url)
-        result["flair_bg_color"] = from_union(
-            [from_str, from_none], self.flair_bg_color)
-        result["flair_color"] = from_union(
-            [from_str, from_none], self.flair_color)
+        result["primary_group_name"] = from_str(self.primary_group_name)
+        result["flair_name"] = from_str(self.flair_name)
+        result["flair_url"] = from_str(self.flair_url)
+        result["flair_bg_color"] = from_str(self.flair_bg_color)
+        result["flair_color"] = from_str(self.flair_color)
         result["version"] = from_int(self.version)
         result["can_edit"] = from_bool(self.can_edit)
         result["can_delete"] = from_bool(self.can_delete)
@@ -414,7 +390,7 @@ class Post:
         result["link_counts"] = from_list(
             lambda x: to_class(LinkCount, x), self.link_counts)
         result["read"] = from_bool(self.read)
-        result["user_title"] = from_union([from_str, from_none], self.user_title)
+        result["user_title"] = from_str(self.user_title)
         result["bookmarked"] = from_bool(self.bookmarked)
         result["actions_summary"] = from_list(lambda x: to_class(
             PostActionsSummary, x), self.actions_summary)
@@ -424,19 +400,16 @@ class Post:
         result["user_id"] = from_int(self.user_id)
         result["hidden"] = from_bool(self.hidden)
         result["trust_level"] = from_int(self.trust_level)
-        result["deleted_at"] = from_union(
-            [from_str, from_none], self.deleted_at)
+        result["deleted_at"] = from_str(self.deleted_at)
         result["user_deleted"] = from_bool(self.user_deleted)
-        result["edit_reason"] = from_union(
-            [from_str, from_none], self.edit_reason)
+        result["edit_reason"] = from_str(self.edit_reason)
         result["can_view_edit_history"] = from_bool(self.can_view_edit_history)
         result["wiki"] = from_bool(self.wiki)
-        result["reviewable_id"] = from_union(
-            [from_int, from_none], self.reviewable_id)
-        result["reviewable_score_count"] = from_union(
-            [from_int, from_none], self.reviewable_score_count)
-        result["reviewable_score_pending_count"] = from_union(
-            [from_int, from_none], self.reviewable_score_pending_count)
+        result["reviewable_id"] = from_int(self.reviewable_id)
+        result["reviewable_score_count"] = from_int(
+            self.reviewable_score_count)
+        result["reviewable_score_pending_count"] = from_int(
+            self.reviewable_score_pending_count)
         return result
 
 
@@ -600,8 +573,8 @@ class SuggestedTopic:
 
 @dataclass
 class Thumbnail:
-    max_width: Optional[int]
-    max_height: Optional[int]
+    max_width: int
+    max_height: int
     width: int
     height: int
     url: str
@@ -609,8 +582,8 @@ class Thumbnail:
     @staticmethod
     def from_dict(obj: Any) -> 'Thumbnail':
         assert isinstance(obj, dict)
-        max_width = from_union([from_none, from_int], obj.get("max_width"))
-        max_height = from_union([from_none, from_int], obj.get("max_height"))
+        max_width = from_int(obj.get("max_width"))
+        max_height = from_int(obj.get("max_height"))
         width = from_int(obj.get("width"))
         height = from_int(obj.get("height"))
         url = from_str(obj.get("url"))
@@ -618,9 +591,8 @@ class Thumbnail:
 
     def to_dict(self) -> dict:
         result: dict = {}
-        result["max_width"] = from_union([from_none, from_int], self.max_width)
-        result["max_height"] = from_union(
-            [from_none, from_int], self.max_height)
+        result["max_width"] = from_int(self.max_width)
+        result["max_height"] = from_int(self.max_height)
         result["width"] = from_int(self.width)
         result["height"] = from_int(self.height)
         result["url"] = from_str(self.url)
@@ -651,33 +623,33 @@ class Topic:
     slug: str
     category_id: int
     word_count: int
-    deleted_at: Optional[str]
+    deleted_at: str
     user_id: int
-    featured_link: Optional[str]
+    featured_link: str
     pinned_globally: bool
-    pinned_at: Optional[str]
-    pinned_until: Optional[str]
-    image_url: Optional[str]
+    pinned_at: str
+    pinned_until: str
+    image_url: str
     slow_mode_seconds: int
-    draft: Optional[str]
+    draft: str
     draft_key: str
     draft_sequence: int
-    unpinned: Optional[str]
+    unpinned: str
     pinned: bool
     current_post_number: int
     highest_post_number: int
-    deleted_by: Optional[str]
+    deleted_by: str
     has_deleted: bool
     actions_summary: List[TopicActionsSummary]
     chunk_size: int
     bookmarked: bool
     bookmarks: List[None]
-    topic_timer: Optional[str]
+    topic_timer: str
     message_bus_last_id: int
     participant_count: int
     show_read_indicator: bool
     thumbnails: List[Thumbnail]
-    slow_mode_enabled_until: Optional[str]
+    slow_mode_enabled_until: str
     summarizable: bool
     details: Details
 
@@ -709,37 +681,34 @@ class Topic:
         slug = from_str(obj.get("slug"))
         category_id = from_int(obj.get("category_id"))
         word_count = from_int(obj.get("word_count"))
-        deleted_at = from_union([from_str, from_none], obj.get("deleted_at"))
+        deleted_at = from_str(obj.get("deleted_at"))
         user_id = from_int(obj.get("user_id"))
-        featured_link = from_union(
-            [from_str, from_none], obj.get("featured_link"))
+        featured_link = from_str(obj.get("featured_link"))
         pinned_globally = from_bool(obj.get("pinned_globally"))
-        pinned_at = from_union([from_str, from_none], obj.get("pinned_at"))
-        pinned_until = from_union(
-            [from_str, from_none], obj.get("pinned_until"))
-        image_url = from_union([from_str, from_none], obj.get("image_url"))
+        pinned_at = from_str(obj.get("pinned_at"))
+        pinned_until = from_str(obj.get("pinned_until"))
+        image_url = from_str(obj.get("image_url"))
         slow_mode_seconds = from_int(obj.get("slow_mode_seconds"))
-        draft = from_union([from_str, from_none], obj.get("draft"))
+        draft = from_str(obj.get("draft"))
         draft_key = from_str(obj.get("draft_key"))
         draft_sequence = from_int(obj.get("draft_sequence"))
-        unpinned = from_union([from_str, from_none], obj.get("unpinned"))
+        unpinned = from_str(obj.get("unpinned"))
         pinned = from_bool(obj.get("pinned"))
         current_post_number = from_int(obj.get("current_post_number"))
         highest_post_number = from_int(obj.get("highest_post_number"))
-        deleted_by = from_union([from_str, from_none], obj.get("deleted_by"))
+        deleted_by = from_str(obj.get("deleted_by"))
         has_deleted = from_bool(obj.get("has_deleted"))
         actions_summary = from_list(
             TopicActionsSummary.from_dict, obj.get("actions_summary"))
         chunk_size = from_int(obj.get("chunk_size"))
         bookmarked = from_bool(obj.get("bookmarked"))
         bookmarks = from_list(from_none, obj.get("bookmarks"))
-        topic_timer = from_union([from_str, from_none], obj.get("topic_timer"))
+        topic_timer = from_str(obj.get("topic_timer"))
         message_bus_last_id = from_int(obj.get("message_bus_last_id"))
         participant_count = from_int(obj.get("participant_count"))
         show_read_indicator = from_bool(obj.get("show_read_indicator"))
         thumbnails = from_list(Thumbnail.from_dict, obj.get("thumbnails"))
-        slow_mode_enabled_until = from_union(
-            [from_str, from_none], obj.get("slow_mode_enabled_until"))
+        slow_mode_enabled_until = from_str(obj.get("slow_mode_enabled_until"))
         summarizable = from_bool(obj.get("summarizable"))
         details = Details.from_dict(obj.get("details"))
         return Topic(post_stream, timeline_lookup, suggested_topics, tags, tags_descriptions, id, title, fancy_title, posts_count, created_at, views, reply_count, like_count, last_posted_at, visible, closed, archived, has_summary, archetype, slug, category_id, word_count, deleted_at, user_id, featured_link, pinned_globally, pinned_at, pinned_until, image_url, slow_mode_seconds, draft, draft_key, draft_sequence, unpinned, pinned, current_post_number, highest_post_number, deleted_by, has_deleted, actions_summary, chunk_size, bookmarked, bookmarks, topic_timer, message_bus_last_id, participant_count, show_read_indicator, thumbnails, slow_mode_enabled_until, summarizable, details)
@@ -771,40 +740,35 @@ class Topic:
         result["slug"] = from_str(self.slug)
         result["category_id"] = from_int(self.category_id)
         result["word_count"] = from_int(self.word_count)
-        result["deleted_at"] = from_union(
-            [from_str, from_none], self.deleted_at)
+        result["deleted_at"] = from_str(self.deleted_at)
         result["user_id"] = from_int(self.user_id)
-        result["featured_link"] = from_union(
-            [from_str, from_none], self.featured_link)
+        result["featured_link"] = from_str(self.featured_link)
         result["pinned_globally"] = from_bool(self.pinned_globally)
-        result["pinned_at"] = from_union([from_str, from_none], self.pinned_at)
-        result["pinned_until"] = from_union(
-            [from_str, from_none], self.pinned_until)
-        result["image_url"] = from_union([from_str, from_none], self.image_url)
+        result["pinned_at"] = from_str(self.pinned_at)
+        result["pinned_until"] = from_str(self.pinned_until)
+        result["image_url"] = from_str(self.image_url)
         result["slow_mode_seconds"] = from_int(self.slow_mode_seconds)
-        result["draft"] = from_union([from_str, from_none], self.draft)
+        result["draft"] = from_str(self.draft)
         result["draft_key"] = from_str(self.draft_key)
         result["draft_sequence"] = from_int(self.draft_sequence)
-        result["unpinned"] = from_union([from_str, from_none], self.unpinned)
+        result["unpinned"] = from_str(self.unpinned)
         result["pinned"] = from_bool(self.pinned)
         result["current_post_number"] = from_int(self.current_post_number)
         result["highest_post_number"] = from_int(self.highest_post_number)
-        result["deleted_by"] = from_union(
-            [from_str, from_none], self.deleted_by)
+        result["deleted_by"] = from_str(self.deleted_by)
         result["has_deleted"] = from_bool(self.has_deleted)
         result["actions_summary"] = from_list(lambda x: to_class(
             TopicActionsSummary, x), self.actions_summary)
         result["chunk_size"] = from_int(self.chunk_size)
         result["bookmarked"] = from_bool(self.bookmarked)
         result["bookmarks"] = from_list(from_none, self.bookmarks)
-        result["topic_timer"] = from_union(
-            [from_str, from_none], self.topic_timer)
+        result["topic_timer"] = from_str(self.topic_timer)
         result["message_bus_last_id"] = from_int(self.message_bus_last_id)
         result["participant_count"] = from_int(self.participant_count)
         result["show_read_indicator"] = from_bool(self.show_read_indicator)
         result["thumbnails"] = from_list(Thumbnail.from_dict, self.thumbnails)
-        result["slow_mode_enabled_until"] = from_union(
-            [from_str, from_none], self.slow_mode_enabled_until)
+        result["slow_mode_enabled_until"] = from_str(
+            self.slow_mode_enabled_until)
         result["summarizable"] = from_bool(self.summarizable)
         result["details"] = to_class(Details, self.details)
         return result
@@ -816,3 +780,416 @@ def topic_from_dict(s: Any) -> Topic:
 
 def topic_to_dict(x: Topic) -> Any:
     return to_class(Topic, x)
+
+
+@dataclass
+class ActionsSummary:
+    id: int
+    can_act: bool
+    count: int
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'ActionsSummary':
+        assert isinstance(obj, dict)
+        id = from_int(obj.get("id"))
+        can_act = from_bool(obj.get("can_act"))
+        count = from_int(obj.get("count"))
+        return ActionsSummary(id, can_act, count)
+
+    def to_dict(self) -> dict:
+        result: dict = {}
+        result["id"] = from_int(self.id)
+        result["can_act"] = from_bool(self.can_act)
+        result["count"] = from_int(self.count)
+        return result
+
+
+@dataclass
+class LinkCount:
+    url: str
+    internal: bool
+    reflection: bool
+    title: str
+    clicks: int
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'LinkCount':
+        assert isinstance(obj, dict)
+        url = from_str(obj.get("url"))
+        internal = from_bool(obj.get("internal"))
+        reflection = from_bool(obj.get("reflection"))
+        title = from_str(obj.get("title"))
+        clicks = from_int(obj.get("clicks"))
+        return LinkCount(url, internal, reflection, title, clicks)
+
+    def to_dict(self) -> dict:
+        result: dict = {}
+        result["url"] = from_str(self.url)
+        result["internal"] = from_bool(self.internal)
+        result["reflection"] = from_bool(self.reflection)
+        result["title"] = from_str(self.title)
+        result["clicks"] = from_int(self.clicks)
+        return result
+
+
+@dataclass
+class Option:
+    id: str
+    html: str
+    votes: int
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'Option':
+        assert isinstance(obj, dict)
+        id = from_str(obj.get("id"))
+        html = from_str(obj.get("html"))
+        votes = from_int(obj.get("votes"))
+        return Option(id, html, votes)
+
+    def to_dict(self) -> dict:
+        result: dict = {}
+        result["id"] = from_str(self.id)
+        result["html"] = from_str(self.html)
+        result["votes"] = from_int(self.votes)
+        return result
+
+
+@dataclass
+class Poll:
+    name: str
+    type: str
+    status: str
+    results: str
+    options: List[Option]
+    voters: int
+    chart_type: str
+    title: None
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'Poll':
+        assert isinstance(obj, dict)
+        name = from_str(obj.get("name"))
+        type = from_str(obj.get("type"))
+        status = from_str(obj.get("status"))
+        results = from_str(obj.get("results"))
+        options = from_list(Option.from_dict, obj.get("options"))
+        voters = from_int(obj.get("voters"))
+        chart_type = from_str(obj.get("chart_type"))
+        title = from_none(obj.get("title"))
+        return Poll(name, type, status, results, options, voters, chart_type, title)
+
+    def to_dict(self) -> dict:
+        result: dict = {}
+        result["name"] = from_str(self.name)
+        result["type"] = from_str(self.type)
+        result["status"] = from_str(self.status)
+        result["results"] = from_str(self.results)
+        result["options"] = from_list(
+            lambda x: to_class(Option, x), self.options)
+        result["voters"] = from_int(self.voters)
+        result["chart_type"] = from_str(self.chart_type)
+        result["title"] = from_none(self.title)
+        return result
+
+
+@dataclass
+class PollsVotes:
+    poll: List[str]
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'PollsVotes':
+        assert isinstance(obj, dict)
+        poll = from_list(from_str, obj.get("poll"))
+        return PollsVotes(poll)
+
+    def to_dict(self) -> dict:
+        result: dict = {}
+        result["poll"] = from_list(from_str, self.poll)
+        return result
+
+
+@dataclass
+class ReplyToUser:
+    username: str
+    name: str
+    avatar_template: str
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'ReplyToUser':
+        assert isinstance(obj, dict)
+        username = from_str(obj.get("username"))
+        name = from_str(obj.get("name"))
+        avatar_template = from_str(obj.get("avatar_template"))
+        return ReplyToUser(username, name, avatar_template)
+
+    def to_dict(self) -> dict:
+        result: dict = {}
+        result["username"] = from_str(self.username)
+        result["name"] = from_str(self.name)
+        result["avatar_template"] = from_str(self.avatar_template)
+        return result
+
+
+@dataclass
+class Retort:
+    post_id: int
+    usernames: List[str]
+    emoji: str
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'Retort':
+        assert isinstance(obj, dict)
+        post_id = from_int(obj.get("post_id"))
+        usernames = from_list(from_str, obj.get("usernames"))
+        emoji = from_str(obj.get("emoji"))
+        return Retort(post_id, usernames, emoji)
+
+    def to_dict(self) -> dict:
+        result: dict = {}
+        result["post_id"] = from_int(self.post_id)
+        result["usernames"] = from_list(from_str, self.usernames)
+        result["emoji"] = from_str(self.emoji)
+        return result
+
+
+@dataclass
+class Post:
+    id: int
+    name: str
+    username: str
+    avatar_template: str
+    created_at: datetime
+    cooked: str
+    post_number: int
+    post_type: int
+    updated_at: datetime
+    reply_count: int
+    quote_count: int
+    incoming_link_count: int
+    reads: int
+    readers_count: int
+    score: float
+    yours: bool
+    topic_id: int
+    topic_slug: str
+    display_username: str
+    version: int
+    can_edit: bool
+    can_delete: bool
+    can_recover: bool
+    can_see_hidden_post: bool
+    can_wiki: bool
+    read: bool
+    bookmarked: bool
+    actions_summary: List[ActionsSummary]
+    moderator: bool
+    admin: bool
+    staff: bool
+    user_id: int
+    hidden: bool
+    trust_level: int
+    deleted_at: None
+    user_deleted: bool
+    edit_reason: None
+    can_view_edit_history: bool
+    wiki: bool
+    user_cakedate: datetime
+    can_accept_answer: bool
+    can_unaccept_answer: bool
+    accepted_answer: bool
+    topic_accepted_answer: bool
+    retorts: List[Retort]
+    reply_to_post_number: int
+    primary_group_name: str
+    flair_name: str
+    flair_url: str
+    flair_bg_color: str
+    flair_color: str
+    flair_group_id: int
+    link_counts: List[LinkCount]
+    user_title: str
+    title_is_group: bool
+    polls: List[Poll]
+    polls_votes: Optional[PollsVotes] = None
+    reply_to_user: Optional[ReplyToUser] = None
+    user_birthdate: Optional[datetime] = None
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'Post':
+        assert isinstance(obj, dict)
+        id = from_int(obj.get("id"))
+        name = from_str(obj.get("name"))
+        username = from_str(obj.get("username"))
+        avatar_template = from_str(obj.get("avatar_template"))
+        created_at = from_datetime(obj.get("created_at"))
+        cooked = from_str(obj.get("cooked"))
+        post_number = from_int(obj.get("post_number"))
+        post_type = from_int(obj.get("post_type"))
+        updated_at = from_datetime(obj.get("updated_at"))
+        reply_count = from_int(obj.get("reply_count"))
+        quote_count = from_int(obj.get("quote_count"))
+        incoming_link_count = from_int(obj.get("incoming_link_count"))
+        reads = from_int(obj.get("reads"))
+        readers_count = from_int(obj.get("readers_count"))
+        score = from_float(obj.get("score"))
+        yours = from_bool(obj.get("yours"))
+        topic_id = from_int(obj.get("topic_id"))
+        topic_slug = from_str(obj.get("topic_slug"))
+        display_username = from_str(obj.get("display_username"))
+        version = from_int(obj.get("version"))
+        can_edit = from_bool(obj.get("can_edit"))
+        can_delete = from_bool(obj.get("can_delete"))
+        can_recover = from_bool(obj.get("can_recover"))
+        can_see_hidden_post = from_bool(obj.get("can_see_hidden_post"))
+        can_wiki = from_bool(obj.get("can_wiki"))
+        read = from_bool(obj.get("read"))
+        bookmarked = from_bool(obj.get("bookmarked"))
+        actions_summary = from_list(
+            ActionsSummary.from_dict, obj.get("actions_summary"))
+        moderator = from_bool(obj.get("moderator"))
+        admin = from_bool(obj.get("admin"))
+        staff = from_bool(obj.get("staff"))
+        user_id = from_int(obj.get("user_id"))
+        hidden = from_bool(obj.get("hidden"))
+        trust_level = from_int(obj.get("trust_level"))
+        deleted_at = from_none(obj.get("deleted_at"))
+        user_deleted = from_bool(obj.get("user_deleted"))
+        edit_reason = from_none(obj.get("edit_reason"))
+        can_view_edit_history = from_bool(obj.get("can_view_edit_history"))
+        wiki = from_bool(obj.get("wiki"))
+        user_cakedate = from_datetime(obj.get("user_cakedate"))
+        can_accept_answer = from_bool(obj.get("can_accept_answer"))
+        can_unaccept_answer = from_bool(obj.get("can_unaccept_answer"))
+        accepted_answer = from_bool(obj.get("accepted_answer"))
+        topic_accepted_answer = from_bool(obj.get("topic_accepted_answer"))
+        retorts = from_list(Retort.from_dict, obj.get("retorts"))
+        reply_to_post_number = from_int(obj.get("reply_to_post_number"))
+        primary_group_name = from_str(obj.get("primary_group_name"))
+        flair_name = from_str(obj.get("flair_name"))
+        flair_url = from_str(obj.get("flair_url"))
+        flair_bg_color = from_str(obj.get("flair_bg_color"))
+        flair_color = from_str(obj.get("flair_color"))
+        flair_group_id = from_int(obj.get("flair_group_id"))
+        link_counts = from_list(LinkCount.from_dict, obj.get("link_counts"))
+        user_title = from_str(obj.get("user_title"))
+        title_is_group = from_bool(obj.get("title_is_group"))
+        polls = from_list(Poll.from_dict, obj.get("polls"))
+        polls_votes = from_union(
+            [PollsVotes.from_dict, from_none], obj.get("polls_votes"))
+        reply_to_user = from_union(
+            [ReplyToUser.from_dict, from_none], obj.get("reply_to_user"))
+        user_birthdate = from_union(
+            [from_datetime, from_none], obj.get("user_birthdate"))
+        return Post(id, name, username, avatar_template, created_at, cooked, post_number, post_type, updated_at, reply_count, quote_count, incoming_link_count, reads, readers_count, score, yours, topic_id, topic_slug, display_username, version, can_edit, can_delete, can_recover, can_see_hidden_post, can_wiki, read, bookmarked, actions_summary, moderator, admin, staff, user_id, hidden, trust_level, deleted_at, user_deleted, edit_reason, can_view_edit_history, wiki, user_cakedate, can_accept_answer, can_unaccept_answer, accepted_answer, topic_accepted_answer, retorts, reply_to_post_number, primary_group_name, flair_name, flair_url, flair_bg_color, flair_color, flair_group_id, link_counts, user_title, title_is_group, polls, polls_votes, reply_to_user, user_birthdate)
+
+    def to_dict(self) -> dict:
+        result: dict = {}
+        result["id"] = from_int(self.id)
+        result["name"] = from_str(self.name)
+        result["username"] = from_str(self.username)
+        result["avatar_template"] = from_str(self.avatar_template)
+        result["created_at"] = self.created_at.isoformat()
+        result["cooked"] = from_str(self.cooked)
+        result["post_number"] = from_int(self.post_number)
+        result["post_type"] = from_int(self.post_type)
+        result["updated_at"] = self.updated_at.isoformat()
+        result["reply_count"] = from_int(self.reply_count)
+        result["quote_count"] = from_int(self.quote_count)
+        result["incoming_link_count"] = from_int(self.incoming_link_count)
+        result["reads"] = from_int(self.reads)
+        result["readers_count"] = from_int(self.readers_count)
+        result["score"] = from_float(self.score)
+        result["yours"] = from_bool(self.yours)
+        result["topic_id"] = from_int(self.topic_id)
+        result["topic_slug"] = from_str(self.topic_slug)
+        result["display_username"] = from_str(self.display_username)
+        result["version"] = from_int(self.version)
+        result["can_edit"] = from_bool(self.can_edit)
+        result["can_delete"] = from_bool(self.can_delete)
+        result["can_recover"] = from_bool(self.can_recover)
+        result["can_see_hidden_post"] = from_bool(self.can_see_hidden_post)
+        result["can_wiki"] = from_bool(self.can_wiki)
+        result["read"] = from_bool(self.read)
+        result["bookmarked"] = from_bool(self.bookmarked)
+        result["actions_summary"] = from_list(
+            lambda x: to_class(ActionsSummary, x), self.actions_summary)
+        result["moderator"] = from_bool(self.moderator)
+        result["admin"] = from_bool(self.admin)
+        result["staff"] = from_bool(self.staff)
+        result["user_id"] = from_int(self.user_id)
+        result["hidden"] = from_bool(self.hidden)
+        result["trust_level"] = from_int(self.trust_level)
+        result["deleted_at"] = from_none(self.deleted_at)
+        result["user_deleted"] = from_bool(self.user_deleted)
+        result["edit_reason"] = from_none(self.edit_reason)
+        result["can_view_edit_history"] = from_bool(self.can_view_edit_history)
+        result["wiki"] = from_bool(self.wiki)
+        result["user_cakedate"] = self.user_cakedate.isoformat()
+        result["can_accept_answer"] = from_bool(self.can_accept_answer)
+        result["can_unaccept_answer"] = from_bool(self.can_unaccept_answer)
+        result["accepted_answer"] = from_bool(self.accepted_answer)
+        result["topic_accepted_answer"] = from_bool(self.topic_accepted_answer)
+        result["retorts"] = from_list(
+            lambda x: to_class(Retort, x), self.retorts)
+        result["reply_to_post_number"] = from_int(self.reply_to_post_number)
+        result["primary_group_name"] = from_str(self.primary_group_name)
+        result["flair_name"] = from_str(self.flair_name)
+        result["flair_url"] = from_str(self.flair_url)
+        result["flair_bg_color"] = from_str(self.flair_bg_color)
+        result["flair_color"] = from_str(self.flair_color)
+        result["flair_group_id"] = from_int(self.flair_group_id)
+        result["link_counts"] = from_list(
+            lambda x: to_class(LinkCount, x), self.link_counts)
+        result["user_title"] = from_str(self.user_title)
+        result["title_is_group"] = from_bool(self.title_is_group)
+        result["polls"] = from_list(lambda x: to_class(Poll, x), self.polls)
+        result["polls_votes"] = from_union(
+            [lambda x: to_class(PollsVotes, x), from_none], self.polls_votes)
+        result["reply_to_user"] = from_union(
+            [lambda x: to_class(ReplyToUser, x), from_none], self.reply_to_user)
+        result["user_birthdate"] = from_union(
+            [lambda x: x.isoformat(), from_none], self.user_birthdate)
+        return result
+
+
+@dataclass
+class PostStream:
+    posts: List[Post]
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'PostStream':
+        assert isinstance(obj, dict)
+        posts = from_list(Post.from_dict, obj.get("posts"))
+        return PostStream(posts)
+
+    def to_dict(self) -> dict:
+        result: dict = {}
+        result["posts"] = from_list(lambda x: to_class(Post, x), self.posts)
+        return result
+
+
+@dataclass
+class TopicPosts:
+    post_stream: PostStream
+    id: int
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'TopicPosts':
+        assert isinstance(obj, dict)
+        post_stream = PostStream.from_dict(obj.get("post_stream"))
+        id = from_int(obj.get("id"))
+        return TopicPosts(post_stream, id)
+
+    def to_dict(self) -> dict:
+        result: dict = {}
+        result["post_stream"] = to_class(PostStream, self.post_stream)
+        result["id"] = from_int(self.id)
+        return result
+
+
+def topic_posts_from_dict(s: Any) -> TopicPosts:
+    return TopicPosts.from_dict(s)
+
+
+def topic_posts_to_dict(x: TopicPosts) -> Any:
+    return to_class(TopicPosts, x)

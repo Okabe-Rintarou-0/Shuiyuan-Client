@@ -211,14 +211,11 @@ class Topic:
         tags_descriptions = obj.get("tags_descriptions")
         category_id = from_int(obj.get("category_id"))
         has_accepted_answer = from_bool(obj.get("has_accepted_answer"))
-        last_read_post_number = from_union(
-            [from_int, from_none], obj.get("last_read_post_number"))
-        unread = from_union([from_int, from_none], obj.get("unread"))
-        new_posts = from_union([from_int, from_none], obj.get("new_posts"))
-        unread_posts = from_union(
-            [from_int, from_none], obj.get("unread_posts"))
-        notification_level = from_union(
-            [from_int, from_none], obj.get("notification_level"))
+        last_read_post_number = from_int(obj.get("last_read_post_number"))
+        unread = from_int( obj.get("unread"))
+        new_posts = from_int( obj.get("new_posts"))
+        unread_posts = from_int(obj.get("unread_posts"))
+        notification_level = from_int(obj.get("notification_level"))
         return Topic(id, title, fancy_title, slug, posts_count, reply_count, highest_post_number, created_at, last_posted_at, bumped, bumped_at, archetype, unseen, pinned, unpinned, visible, closed, archived, bookmarked, liked, tags, tags_descriptions, category_id, has_accepted_answer, last_read_post_number, unread, new_posts, unread_posts, notification_level)
 
     def to_dict(self) -> dict:
@@ -246,14 +243,11 @@ class Topic:
         result["tags_descriptions"] = self.tags_descriptions,
         result["category_id"] = from_int(self.category_id)
         result["has_accepted_answer"] = from_bool(self.has_accepted_answer)
-        result["last_read_post_number"] = from_union(
-            [from_int, from_none], self.last_read_post_number)
-        result["unread"] = from_union([from_int, from_none], self.unread)
-        result["new_posts"] = from_union([from_int, from_none], self.new_posts)
-        result["unread_posts"] = from_union(
-            [from_int, from_none], self.unread_posts)
-        result["notification_level"] = from_union(
-            [from_int, from_none], self.notification_level)
+        result["last_read_post_number"] = from_int(self.last_read_post_number)
+        result["unread"] = from_int( self.unread)
+        result["new_posts"] = from_int( self.new_posts)
+        result["unread_posts"] = from_int(self.unread_posts)
+        result["notification_level"] = from_int(self.notification_level)
         return result
 
 

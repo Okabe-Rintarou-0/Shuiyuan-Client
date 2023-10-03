@@ -14,11 +14,15 @@ def from_none(x: Any) -> Any:
 
 
 def from_str(x: Any) -> str:
+    if x is None:
+        return ''
     assert isinstance(x, str)
     return x
 
 
 def from_int(x: Any) -> int:
+    if x is None:
+        return 0
     assert isinstance(x, int) and not isinstance(x, bool)
     return x
 
@@ -42,6 +46,8 @@ def from_datetime(x: Any) -> datetime:
 
 
 def from_float(x: Any) -> float:
+    if x is None:
+        return 0
     assert isinstance(x, (float, int)) and not isinstance(x, bool)
     return float(x)
 

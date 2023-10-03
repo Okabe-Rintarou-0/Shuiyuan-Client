@@ -5,7 +5,7 @@ import requests
 from exceptions import ResponseDataFormatErrorException, TooManyOperationsException
 
 from models.search import SearchQuery, SearchResult
-from models.topic import Topic
+from models.topic import Topic, TopicPosts
 from models.user import UserActionsInfo, UserBadgesInfo, UserEmailInfo, UserInfo
 from models.post import Post
 
@@ -154,6 +154,11 @@ class Client():
         url = f'{base_url}/t/{id}.json'
         r = self._get_request(url)
         return self._json_response_wrapper(r, Topic.from_dict)
+    
+    def get_topic_posts(self, id: int) -> Optional[TopicPosts]:
+        url = f'{base_url}/t/{id}/posts.json'
+        r = self._get_request(url)
+        return self._json_response_wrapper(r, TopicPosts.from_dict)
 
     def get_user_actions(self, username: str, filter: str = '', offset: Optional[int] = None) -> Optional[UserActionsInfo]:
         params = {

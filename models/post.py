@@ -26,14 +26,14 @@ class ActionsSummary:
         assert isinstance(obj, dict)
         id = from_int(obj.get("id"))
         can_act = from_bool(obj.get("can_act"))
-        count = from_union([from_int, from_none], obj.get("count"))
+        count = from_int(obj.get("count"))
         return ActionsSummary(id, can_act, count)
 
     def to_dict(self) -> dict:
         result: dict = {}
         result["id"] = from_int(self.id)
         result["can_act"] = from_bool(self.can_act)
-        result["count"] = from_union([from_int, from_none], self.count)
+        result["count"] = from_int(self.count)
         return result
 
 
@@ -93,7 +93,7 @@ class Post:
     can_recover: bool
     can_see_hidden_post: bool
     can_wiki: bool
-    user_title: Optional[str]
+    user_title: str
     reply_to_user: Optional[ReplyToUser]
     bookmarked: bool
     raw: str
@@ -129,8 +129,7 @@ class Post:
         post_type = from_int(obj.get("post_type"))
         updated_at = from_datetime(obj.get("updated_at"))
         reply_count = from_int(obj.get("reply_count"))
-        reply_to_post_number = from_union(
-            [from_int, from_none], obj.get("reply_to_post_number"))
+        reply_to_post_number = from_int(obj.get("reply_to_post_number"))
         quote_count = from_int(obj.get("quote_count"))
         incoming_link_count = from_int(obj.get("incoming_link_count"))
         reads = from_int(obj.get("reads"))
@@ -152,7 +151,7 @@ class Post:
         can_recover = from_bool(obj.get("can_recover"))
         can_see_hidden_post = from_bool(obj.get("can_see_hidden_post"))
         can_wiki = from_bool(obj.get("can_wiki"))
-        user_title = from_union([from_str, from_none], obj.get("user_title"))
+        user_title = from_str(obj.get("user_title"))
         reply_to_user = from_union(
             [ReplyToUser.from_dict, from_none], obj.get("reply_to_user"))
         bookmarked = from_bool(obj.get("bookmarked"))
@@ -190,8 +189,7 @@ class Post:
         result["post_type"] = from_int(self.post_type)
         result["updated_at"] = self.updated_at.isoformat()
         result["reply_count"] = from_int(self.reply_count)
-        result["reply_to_post_number"] = from_union(
-            [from_int, from_none], self.reply_to_post_number)
+        result["reply_to_post_number"] = from_int(self.reply_to_post_number)
         result["quote_count"] = from_int(self.quote_count)
         result["incoming_link_count"] = from_int(self.incoming_link_count)
         result["reads"] = from_int(self.reads)
@@ -213,8 +211,7 @@ class Post:
         result["can_recover"] = from_bool(self.can_recover)
         result["can_see_hidden_post"] = from_bool(self.can_see_hidden_post)
         result["can_wiki"] = from_bool(self.can_wiki)
-        result["user_title"] = from_union(
-            [from_str, from_none], self.user_title)
+        result["user_title"] = from_str(self.user_title)
         result["reply_to_user"] = to_class(ReplyToUser, self.reply_to_user)
         result["bookmarked"] = from_bool(self.bookmarked)
         result["raw"] = from_str(self.raw)
