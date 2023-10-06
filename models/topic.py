@@ -490,8 +490,8 @@ class SuggestedTopic:
     visible: bool
     closed: bool
     archived: bool
-    bookmarked: str
-    liked: str
+    bookmarked: bool
+    liked: bool
     tags: List[Any]
     tags_descriptions: TagsDescriptions
     like_count: int
@@ -523,8 +523,8 @@ class SuggestedTopic:
         visible = from_bool(obj.get("visible"))
         closed = from_bool(obj.get("closed"))
         archived = from_bool(obj.get("archived"))
-        bookmarked = from_str(obj.get("bookmarked"))
-        liked = from_str(obj.get("liked"))
+        bookmarked = from_bool(obj.get("bookmarked"))
+        liked = from_bool(obj.get("liked"))
         tags = from_list(lambda x: x, obj.get("tags"))
         tags_descriptions = TagsDescriptions.from_dict(
             obj.get("tags_descriptions"))
@@ -557,8 +557,8 @@ class SuggestedTopic:
         result["visible"] = from_bool(self.visible)
         result["closed"] = from_bool(self.closed)
         result["archived"] = from_bool(self.archived)
-        result["bookmarked"] = from_str(self.bookmarked)
-        result["liked"] = from_str(self.liked)
+        result["bookmarked"] = from_bool(self.bookmarked)
+        result["liked"] = from_bool(self.liked)
         result["tags"] = from_list(lambda x: x,  self.tags)
         result["tags_descriptions"] = to_class(
             TagsDescriptions, self.tags_descriptions)
