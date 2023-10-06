@@ -25,6 +25,7 @@
 + [get_topic_posts.py](./examples/get_topic_posts.py): 获取某一主题下所有的 posts
 + [get_post_imgs.py](./examples/get_post_imgs.py): 获取某一 post 的所有图片链接（荣光楼🥵）
 + [get_post_votes.py](./examples/get_post_votes.py): 获取某一主题下（投票水楼）的投票信息
++ [get_post_retorts.py](./examples/get_post_retorts.py): 获取某一 Post 被贴的表情
 + [get_user_posts.py](./examples//get_user_posts.py): 获取某一用户所有的 posts
 + [newest_recruit.py](./examples/newest_recruit.py): 获取最新的近半个月以来的招募信息
 + [user_api_key.py](./examples/user_api_key.py): 获取并使用 User-Api-Key
