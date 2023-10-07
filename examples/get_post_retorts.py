@@ -37,8 +37,8 @@ if __name__ == '__main__':
 
     post = cli.retrieve_single_post(2404119)
     for retort in post.retorts:
-        usernames = retort['usernames']
-        emoji = retort['emoji']
+        usernames = retort.usernames
+        emoji = retort.emoji
         if emoji in emoji_code_map:
             emoji = unicode_str_to_emoji(emoji_code_map[emoji])
         

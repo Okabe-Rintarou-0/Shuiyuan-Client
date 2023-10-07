@@ -60,6 +60,28 @@ class ReplyToUser:
 
 
 @dataclass
+class Retort:
+    post_id: int
+    usernames: List[str]
+    emoji: str
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'Retort':
+        assert isinstance(obj, dict)
+        post_id = from_int(obj.get("post_id"))
+        usernames = from_list(from_str, obj.get("usernames"))
+        emoji = from_str(obj.get("emoji"))
+        return Retort(post_id, usernames, emoji)
+
+    def to_dict(self) -> dict:
+        result: dict = {}
+        result["post_id"] = from_int(self.post_id)
+        result["usernames"] = from_list(from_str, self.usernames)
+        result["emoji"] = from_str(self.emoji)
+        return result
+
+
+@dataclass
 class Post:
     id: int
     name: str
@@ -114,7 +136,7 @@ class Post:
     can_unaccept_answer: bool
     accepted_answer: bool
     topic_accepted_answer: bool
-    retorts: List[Any]
+    retorts: List[Retort]
 
     @staticmethod
     def from_dict(obj: Any) -> 'Post':
@@ -174,7 +196,7 @@ class Post:
         can_unaccept_answer = from_bool(obj.get("can_unaccept_answer"))
         accepted_answer = from_bool(obj.get("accepted_answer"))
         topic_accepted_answer = from_bool(obj.get("topic_accepted_answer"))
-        retorts = from_list(lambda x: x, obj.get("retorts"))
+        retorts = from_list(Retort.from_dict, obj.get("retorts"))
         return Post(id, name, username, avatar_template, created_at, cooked, post_number, post_type, updated_at, reply_count, reply_to_post_number, quote_count, incoming_link_count, reads, readers_count, score, yours, topic_id, topic_slug, display_username, primary_group_name, flair_name, flair_url, flair_bg_color, flair_color, flair_group_id, version, can_edit, can_delete, can_recover, can_see_hidden_post, can_wiki, user_title, reply_to_user, bookmarked, raw, actions_summary, moderator, admin, staff, user_id, hidden, trust_level, deleted_at, user_deleted, edit_reason, can_view_edit_history, wiki, user_cakedate, can_accept_answer, can_unaccept_answer, accepted_answer, topic_accepted_answer, retorts)
 
     def to_dict(self) -> dict:
@@ -233,7 +255,7 @@ class Post:
         result["can_unaccept_answer"] = from_bool(self.can_unaccept_answer)
         result["accepted_answer"] = from_bool(self.accepted_answer)
         result["topic_accepted_answer"] = from_bool(self.topic_accepted_answer)
-        result["retorts"] = from_list(lambda x: x, self.retorts)
+        result["retorts"] = from_list(Retort.from_dict, self.retorts)
         return result
 
     def get_imgs(self) -> List[PostImage]:
