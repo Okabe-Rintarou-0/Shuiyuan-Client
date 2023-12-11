@@ -1,6 +1,6 @@
 beautifulsoup4==4.12.2
 cryptography==39.0.1
-pandas==1.5.3
+pandas==2.1.4
 pytesseract==0.3.10
 python_dateutil==2.8.2
 Requests==2.31.0
